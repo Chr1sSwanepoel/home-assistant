@@ -305,7 +305,9 @@ class AndroidTVDevice(MediaPlayerDevice):
         self._state = None
         self._muted = None
         self._available = self.androidtv.available
-
+        self._properties = self.androidtv.properties
+        self._unique_id = 'androitv-{}-{}'.format(
+            name, self._properties['serialno'])
         # whether or not the ADB connection is currently in use
         self.adb_lock = threading.Lock()
 
@@ -412,6 +414,12 @@ class AndroidTVDevice(MediaPlayerDevice):
     def supported_features(self):
         """Flag media player features that are supported."""
         return SUPPORT_ANDROIDTV
+
+    @property
+    def unique_id(self):
+        """Return the device unique id."""
+        print(self._unique_id)
+        return self._unique_id
 
     @adb_decorator()
     def turn_on(self):
