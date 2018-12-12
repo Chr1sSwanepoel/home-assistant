@@ -40,6 +40,7 @@ from homeassistant.const import (
     ATTR_ENTITY_ID, CONF_HOST, CONF_NAME, CONF_PORT,
     STATE_IDLE, STATE_PAUSED, STATE_PLAYING, STATE_OFF)
 from homeassistant.exceptions import PlatformNotReady
+from homeassistant.helpers import device_registry as dr
 import homeassistant.helpers.config_validation as cv
 
 REQUIREMENTS = ['androidtv==0.0.3']
@@ -420,6 +421,22 @@ class AndroidTVDevice(MediaPlayerDevice):
         """Return the device unique id."""
         print(self._unique_id)
         return self._unique_id
+
+    @property
+    def device_info(self):
+        """Return the device info."""
+        return {
+            'connections': {
+                (dr.CONNECTION_NETWORK_MAC, self._properties['wifimac'])
+            },
+            'identifiers': {
+                (DOMAIN, self._unique_id)
+            },
+            'name': self._name,
+            'manufacturer': self._properties['manufacturer'],
+            'model': self._properties['model'],
+            'sw_version': self._properties['sw_version'],
+        }
 
     @adb_decorator()
     def turn_on(self):
