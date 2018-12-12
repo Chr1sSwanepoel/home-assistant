@@ -419,7 +419,6 @@ class AndroidTVDevice(MediaPlayerDevice):
     @property
     def unique_id(self):
         """Return the device unique id."""
-        print(self._unique_id)
         return self._unique_id
 
     @property
